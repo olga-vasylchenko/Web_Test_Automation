@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class SearchResultsPage extends PageObject {
 
@@ -45,9 +46,6 @@ public class SearchResultsPage extends PageObject {
 
     private String priceFractionCss = "[class*='Result__priceFraction']";
 
-    @FindBy(css = "[data-key='dw.changeFilterSettings']")
-    private WebElement noResultsFoundMessage;
-
     protected SearchResultsPage(WebDriver driver) {
         super(driver);
         this.driver = driver;
@@ -65,12 +63,12 @@ public class SearchResultsPage extends PageObject {
         }
     }
 
-    public ArrayList<Double> getResultsPricesList() throws Exception {
+    public ArrayList<Double> getResultsPricesList() throws NoSuchElementException {
         if (!searchResultsList.isEmpty()) {
             return getPricesList(searchResultsList);
         }
 
-        throw new Exception("No search results were displayed!");
+        throw new NoSuchElementException("No search results were displayed!");
     }
 
     public void choosePriceSortingOption() {
@@ -105,10 +103,10 @@ public class SearchResultsPage extends PageObject {
         });
     }
 
-    private void waitForActiveSortingOption(final WebElement priceSortingOptionParentElement) {
+    private void waitForActiveSortingOption(final WebElement sortingOptionParentElement) {
         new WebDriverWait(this.driver, 5).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
-                boolean condition = getActiveSortingOptionCondition(priceSortingOptionParentElement);
+                boolean condition = getActiveSortingOptionCondition(sortingOptionParentElement);
                 return condition == true;
             }
         });
@@ -118,7 +116,7 @@ public class SearchResultsPage extends PageObject {
         return modeElement.getAttribute("class").contains("activeTab");
     }
 
-    private boolean getActiveSortingOptionCondition(WebElement priceSortingOptionParentElement) {
-        return priceSortingOptionParentElement.getAttribute("class").contains("mainActive");
+    private boolean getActiveSortingOptionCondition(WebElement sortingOptionParentElement) {
+        return sortingOptionParentElement.getAttribute("class").contains("mainActive");
     }
 }

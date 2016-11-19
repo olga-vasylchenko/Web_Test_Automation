@@ -4,39 +4,47 @@ import static org.junit.Assert.assertTrue;
 
 import com.goeuro.pageObjects.searchResults.HomePage;
 import com.goeuro.pageObjects.searchResults.SearchResultsPage;
+import cucumber.api.Scenario;
 import domain.homePageSearch.SearchPresets;
 import domain.homePageSearch.SearchOption;
-import org.junit.Test;
-
-import com.goeuro.BaseWebFixture;
+import cucumber.api.java8.En;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-public class SearchResultsAreSortedCorrectly extends BaseWebFixture {
+public class SearchResultsAreSortedCorrectly extends BaseWebFixture implements En {
 
     private HomePage homePage;
     private SearchResultsPage searchResultsPage;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        homePage = HomePage.open(driver);
-    }
+    public SearchResultsAreSortedCorrectly() {
 
-    @Test
-    public void trainSearchResultsAreSortedByCheapestPrice() throws Exception {
-        Map<SearchOption, Object> searchOptions = SearchPresets.getDefaultSearchOptions();
+        Before((Scenario scenario) -> {
+            super.setUp();
+            homePage = HomePage.open(driver);
+        });
 
-        searchResultsPage = homePage.search(searchOptions);
-        searchResultsPage.selectTrainsMode();
-        searchResultsPage.choosePriceSortingOption();
-        ArrayList<Double> pricesList = searchResultsPage.getResultsPricesList();
-        boolean isSorted = checkPriceListIsSortedInAscendingOrder(pricesList);
+        Given("^I perform a search for today$", () -> {
+            Map<SearchOption, Object> searchOptions = SearchPresets.getDefaultSearchOptions();
+            searchResultsPage = homePage.search(searchOptions);
+        });
 
-        assertTrue("The list of train options is not sorted by price from the cheapest to more expensive.",
-                isSorted);
+        When("^I select Train mode and Cheapest sorting options on Search Results page$", () -> {
+            searchResultsPage.selectTrainsMode();
+            searchResultsPage.choosePriceSortingOption();
+        });
 
+        Then("^the results are sorted by price in ascending order$", () -> {
+            ArrayList<Double> pricesList = searchResultsPage.getResultsPricesList();
+            boolean isSorted = checkPriceListIsSortedInAscendingOrder(pricesList);
+
+            assertTrue("The list of train options is not sorted by price from the cheapest to more expensive.",
+                    isSorted);
+        });
+
+        After((Scenario scenario) -> {
+            super.tearDown();
+        });
     }
 
     private boolean checkPriceListIsSortedInAscendingOrder(ArrayList<Double> pricesList) {
