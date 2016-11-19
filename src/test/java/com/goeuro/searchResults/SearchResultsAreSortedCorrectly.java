@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.goeuro.BaseWebFixture;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class SearchResultsAreSortedCorrectly extends BaseWebFixture {
@@ -24,8 +25,30 @@ public class SearchResultsAreSortedCorrectly extends BaseWebFixture {
     }
 
     @Test
-    public void searchResultsAreSortedByPlice() {
+    public void trainSearchResultsAreSortedByCheapestPrice() throws Exception {
         Map<SearchOption, Object> searchOptions = SearchPresets.getDefaultSearchOptions();
+
         searchResultsPage = homePage.search(searchOptions);
+        searchResultsPage.selectTrainsMode();
+        searchResultsPage.choosePriceSortingOption();
+        ArrayList<Double> pricesList = searchResultsPage.getResultsPricesList();
+        boolean isSorted = checkPriceListIsSortedInAscendingOrder(pricesList);
+
+        assertTrue("The list of train options is not sorted by price from the cheapest to more expensive.",
+                isSorted);
+
+    }
+
+    private boolean checkPriceListIsSortedInAscendingOrder(ArrayList<Double> pricesList) {
+        boolean isSorted = true;
+        for (int i = 0; i < pricesList.size(); i++) {
+            if (i < pricesList.size() - 1) {
+                if (Double.compare(pricesList.get(i), pricesList.get(i + 1)) == 1) {
+                    isSorted = false;
+                    break;
+                }
+            }
+        }
+        return isSorted;
     }
 }

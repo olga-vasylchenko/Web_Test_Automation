@@ -9,7 +9,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import javax.swing.*;
 import java.util.Map;
 
 public class HomePage extends PageObject {
@@ -73,6 +72,5 @@ public class HomePage extends PageObject {
     private void specifyFrom(String from) {
         fromInput.clear();
         fromInput.sendKeys(from);
-        toInput.sendKeys(Keys.ENTER);
     }
 }
