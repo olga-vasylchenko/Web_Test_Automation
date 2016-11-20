@@ -1,6 +1,7 @@
 # System requirements
-* [Java 8 SDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) installed
-* [Firefox](https://www.mozilla.org/en-US/firefox/new/) browser installed
+* Please install [Java 8 SDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* Please install [Chrome browser](https://www.google.com/chrome/browser/desktop/) in the default location for your platform
+* Please download [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) and add it to your PATH environment variable
 
 #Run the tests
 * clone the project as ```git clone git@github.com:olga-vasylchenko/Web_Test_Automation.git```
