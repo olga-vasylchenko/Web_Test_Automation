@@ -1,0 +1,41 @@
+apply plugin: 'java'
+apply plugin: 'wrapper'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+wrapper {
+  gradleVersion = "3.2"
+}
+
+ext {
+  junitVersion = "4.+"
+  seleniumVersion = "2.+"
+}
+
+repositories { mavenCentral() }
+
+dependencies {
+  compile "org.seleniumhq.selenium:selenium-java:$seleniumVersion"
+  testCompile "junit:junit:$junitVersion",
+          'info.cukes:cucumber-jvm:1.2.5',
+          'info.cukes:cucumber-java8:1.2.5',
+          'info.cukes:cucumber-junit:1.2.5'
+}
+
+configurations {
+  cucumberRuntime {
+    extendsFrom testRuntime
+  }
+}
+
+task cucumber() {
+  dependsOn assemble, compileTestJava
+  doLast {
+    javaexec {
+      main = "cucumber.api.cli.Main"
+      classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+      args = ['-p', 'pretty', '-p', 'html:target/cucumber', '--glue', 'com.goeuro.searchResults', 'src/test/resources']
+    }
+  }
+}
